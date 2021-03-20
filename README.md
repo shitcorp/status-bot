@@ -1,5 +1,3 @@
-# Simple Discord Status Bot
-
 ## Setup:
 
 **Prerequirements:**
@@ -54,4 +52,5 @@ Use it to post a statusmessage in the channel of your choosing (the message will
 ![Service Up](./assets/Statusbot_demo_serviceup.png)
 
 **Service unavailable:**
+
 ![Service Down](./assets/Statusbot_demo_servicedown.png)
