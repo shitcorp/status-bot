@@ -17,7 +17,7 @@ npm run dc:up
 
 to start a MongoDB Container so you dont have to insall MongoDB. To stop it run
 
-```
+```console
 npm run dc:down
 ```
 
