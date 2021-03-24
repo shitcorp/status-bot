@@ -1,5 +1,12 @@
 {
     "Example_Monitor": {
-        "host": "http://localhost:3333/"
+        "host": "http://localhost:3333/",
+        "expect": {
+            "status": 200,
+            "body": {
+                "match": "\\([A-Z])\\w+\\",
+                "type": "regex"
+            }
+        }
     }
 }

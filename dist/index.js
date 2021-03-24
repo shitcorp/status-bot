@@ -115,8 +115,8 @@ var path_1 = __importDefault(require("path"));
                         cacheGuilds: true,
                         cacheChannels: true,
                         cacheOverwrites: false,
-                        cacheRoles: true,
-                        cacheEmojis: true,
+                        cacheRoles: false,
+                        cacheEmojis: false,
                         cachePresences: false,
                         // @ts-ignore
                         cacheMembers: false,

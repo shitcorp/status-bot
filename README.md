@@ -1,9 +1,25 @@
 ## Setup:
 
-**Prerequirements:**
+**Prerequirements (no Docker):**
 
 > - Nodejs installed
 > - MongoDB installed
+
+**Prerequirements (with Docker):**
+
+(Still needs Nodejs installed!)
+
+Run the command 
+
+```console
+npm run dc:up
+```
+
+to start a MongoDB Container so you dont have to insall MongoDB. To stop it run
+
+```
+npm run dc:down
+```
 
 **Steps:**
 

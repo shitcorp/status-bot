@@ -51,7 +51,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
         Object.entries(monitorObject).map(function (_a) {
             var key = _a[0], value = _a[1];
             return __awaiter(void 0, void 0, void 0, function () {
-                var hostModel, newHost, res, e_1;
+                var hostModel, newHost, res, down, pattern, e_1;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0: return [4 /*yield*/, hostmodel_1.default.findOne({ _id: key })];
@@ -79,35 +79,51 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                             }
                             _b.label = 4;
                         case 4:
-                            _b.trys.push([4, 10, , 12]);
+                            _b.trys.push([4, 7, , 9]);
                             return [4 /*yield*/, c(value.host, "GET").send()];
                         case 5:
                             res = _b.sent();
+                            console.log(res);
                             if (!res)
                                 return [2 /*return*/];
-                            if (!(res.statusCode >= 200 && res.statusCode <= 500)) return [3 /*break*/, 7];
-                            // host is up
-                            hostModel.probes.push("UP_" + Date.now());
+                            down = false;
+                            if (value.expect.status) {
+                                if (res.statusCode !== value.expect.status) {
+                                    down = true;
+                                }
+                            }
+                            if (value.expect.body) {
+                                switch (value.expect.body.type) {
+                                    case "regex":
+                                        pattern = new RegExp(value.expect.body.match);
+                                        if (res.body.toString().test(pattern) === null) {
+                                            down = true;
+                                        }
+                                        break;
+                                    case "exact":
+                                        if (res.body.toString() !== value.expect.body.match) {
+                                            down = true;
+                                        }
+                                        break;
+                                    default:
+                                        throw new Error('Only "regex" or "exact" are allowed in the type field.');
+                                }
+                            }
+                            hostModel.probes.push(down === true ? "DOWN_" + Date.now() : "UP_" + Date.now());
                             return [4 /*yield*/, hostModel.save()];
                         case 6:
                             _b.sent();
                             return [3 /*break*/, 9];
                         case 7:
+                            e_1 = _b.sent();
+                            console.error(e_1);
+                            // host probably down
                             hostModel.probes.push("DOWN_" + Date.now());
                             return [4 /*yield*/, hostModel.save()];
                         case 8:
                             _b.sent();
-                            _b.label = 9;
-                        case 9: return [3 /*break*/, 12];
-                        case 10:
-                            e_1 = _b.sent();
-                            // host probably down
-                            hostModel.probes.push("DOWN_" + Date.now());
-                            return [4 /*yield*/, hostModel.save()];
-                        case 11:
-                            _b.sent();
-                            return [3 /*break*/, 12];
-                        case 12: return [2 /*return*/];
+                            return [3 /*break*/, 9];
+                        case 9: return [2 /*return*/];
                     }
                 });
             });

@@ -38,17 +38,45 @@ export default async () => {
 
       try {
         const res = await c(value.host, "GET").send();
+        console.log(res);
 
         if (!res) return;
-        if (res.statusCode >= 200 && res.statusCode <= 500) {
-          // host is up
-          hostModel.probes.push(`UP_${Date.now()}`);
-          await hostModel.save();
-        } else {
-          hostModel.probes.push(`DOWN_${Date.now()}`);
-          await hostModel.save();
+
+        let down = false;
+
+        if (value.expect.status) {
+          if (res.statusCode !== value.expect.status) {
+            down = true;
+          }
         }
+
+        if (value.expect.body) {
+          switch (value.expect.body.type) {
+            case "regex":
+              // do regex matching here
+              const pattern = new RegExp(value.expect.body.match);
+              if (res.body.toString().test(pattern) === null) {
+                down = true;
+                
+              }
+              break;
+            case "exact":
+              if (res.body.toString() !== value.expect.body.match) {
+                down = true;
+              }
+              break;
+            default:
+              throw new Error(
+                'Only "regex" or "exact" are allowed in the type field.'
+              );
+          }
+        }
+
+        hostModel.probes.push(down === true ? `DOWN_${Date.now()}` : `UP_${Date.now()}`); 
+        await hostModel.save();
+
       } catch (e) {
+        console.error(e);
         // host probably down
         hostModel.probes.push(`DOWN_${Date.now()}`);
         await hostModel.save();

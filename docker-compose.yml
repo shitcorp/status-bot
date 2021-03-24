@@ -1,0 +1,9 @@
+version: '3.2'
+services:
+  mongo:
+      image: mongo:latest
+      ports:
+        - "127.0.0.1:27017:27017"
+      volumes:
+        - ./data/mongo:/data/db
+      container_name: statusbot_mongo
