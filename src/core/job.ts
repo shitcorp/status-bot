@@ -38,7 +38,6 @@ export default async () => {
 
       try {
         const res = await c(value.host, "GET").send();
-        console.log(res);
 
         if (!res) return;
 

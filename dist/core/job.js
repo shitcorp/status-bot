@@ -83,7 +83,6 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                             return [4 /*yield*/, c(value.host, "GET").send()];
                         case 5:
                             res = _b.sent();
-                            console.log(res);
                             if (!res)
                                 return [2 /*return*/];
                             down = false;
